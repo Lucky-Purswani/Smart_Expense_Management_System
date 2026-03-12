@@ -1,0 +1,171 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+
+enum TransactionType {
+  DEBIT
+  CREDIT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+//////////////////////////////////////////////////////
+// USER
+//////////////////////////////////////////////////////
+
+model User {
+  id                  String   @id @default(cuid())
+  accountNumber       String   @unique
+  accountHolderName   String
+  name                String
+  email               String   @unique
+  phone               String   @unique
+  passwordHash        String
+
+  createdAt           DateTime @default(now())
+  lastLogin           DateTime?
+
+  // SOFT DELETE
+  isDeleted           Boolean  @default(false)
+  deletedAt           DateTime?
+
+  wallet              Wallet?
+  transactions        Transaction[]
+  expenseWindows      ExpenseWindow[]
+  otps                UserOTP[]
+  refreshTokens       RefreshToken[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([accountNumber])
+  @@index([isDeleted])
+}
+
+//////////////////////////////////////////////////////
+// WALLET
+//////////////////////////////////////////////////////
+
+model Wallet {
+  id          String   @id @default(cuid())
+
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  balance     Decimal  @db.Decimal(14,2)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+//////////////////////////////////////////////////////
+// EXPENSE WINDOWS
+//////////////////////////////////////////////////////
+
+model ExpenseWindow {
+  id                String   @id @default(cuid())
+
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name              String
+  labels            String[]
+
+  allowance         Decimal  @db.Decimal(14,2)
+  spent             Decimal  @db.Decimal(14,2)
+
+  color             String
+
+  isDefault         Boolean  @default(false)
+  isActive          Boolean  @default(true)
+
+  alert90Sent  Boolean @default(false)
+  alert100Sent Boolean @default(false)
+
+  transactionCount  Int      @default(0)
+  resetDay         Int?
+
+  createdAt         DateTime @default(now())
+  lastTransaction   DateTime?
+
+  transactions      Transaction[]
+
+  @@index([userId])
+  @@index([isDefault])
+}
+
+//////////////////////////////////////////////////////
+// TRANSACTIONS
+//////////////////////////////////////////////////////
+
+model Transaction {
+  id          String   @id @default(cuid())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  windowId    String
+  window      ExpenseWindow @relation(fields: [windowId], references: [id])
+
+  amount      Decimal  @db.Decimal(14,2)
+
+  recipient   String
+  note        String?
+
+  type        TransactionType
+  status      TransactionStatus @default(COMPLETED)
+
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([windowId])
+  @@index([createdAt])
+  @@index([userId, type])
+}
+
+//////////////////////////////////////////////////////
+// USER OTP
+//////////////////////////////////////////////////////
+
+model UserOTP {
+  id         String   @id @default(cuid())
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  otpCode    String
+  verified   Boolean  @default(false)
+
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}

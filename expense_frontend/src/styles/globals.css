@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-app-bg: #0f0f13;
+  --color-panel-bg: #1a1a23;
+  --color-card-bg: #1e1e2a;
+  --color-hover-bg: #252535;
+  --color-input-bg: #16161f;
+
+  --color-text-main: #f0f0f5;
+  --color-text-sub: #8888a0;
+  --color-text-disabled: #55556a;
+
+  --color-brand: #6c5ce7;
+  --color-brand-hover: #5a4bd6;
+  --color-brand-text: #ffffff;
+
+  --color-success: #00d68f;
+  --color-warning: #ffaa00;
+  --color-danger: #ff4757;
+  --color-danger-panel: #2a1a1c; 
+
+  --color-border-main: #2a2a3a;
+
+  --spacing-sidebar: 260px;
+  --spacing-header: 64px;
+}
+
+/* ─── Base ────────────────────────────────────────── */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--color-app-bg);
+    color: var(--color-text-main);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-app-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border-main); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-text-disabled); }
+}
+
+/* ─── Keyframes ──────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
