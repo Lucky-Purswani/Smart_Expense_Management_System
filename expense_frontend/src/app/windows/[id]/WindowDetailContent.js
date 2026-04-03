@@ -295,7 +295,7 @@ export default function WindowDetailContent() {
     } catch { }
   };
 
-  const handleManualReset = async ({ resetDay = null } = {}) => {
+  const handleManualReset = async ({ resetDay } = {}) => {
     try {
       await resetWindow.mutateAsync({ id, resetDay });
       setShowReset(false);
