@@ -29,7 +29,7 @@ export default function Input({
         disabled={disabled}
         autoFocus={autoFocus}
         maxLength={maxLength}
-        className="w-full bg-input-bg border border-border rounded-md px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent transition-colors placeholder:text-text-muted disabled:opacity-50"
+        className="w-full bg-input-bg border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all placeholder:text-text-muted disabled:opacity-50"
       />
       {error && <span className="text-xs text-danger">{error}</span>}
     </div>

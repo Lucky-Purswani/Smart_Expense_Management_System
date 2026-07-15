@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
 @theme {
+  /* Font */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
   /* Background */
-  --color-app-bg: #0a0a0f;
-  --color-panel-bg: #13131a;
-  --color-hover-bg: #1c1c26;
-  --color-input-bg: #0f0f16;
+  --color-app-bg: #09090b;
+  --color-panel-bg: #111113;
+  --color-hover-bg: #1a1a1f;
+  --color-input-bg: #0c0c0e;
 
   /* Text */
-  --color-text-primary: #f0f0f5;
-  --color-text-secondary: #8888a0;
-  --color-text-muted: #55556a;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #52525b;
 
   /* Accent */
   --color-accent: #6c5ce7;
@@ -18,11 +21,11 @@
   --color-accent-text: #ffffff;
 
   /* Semantic */
-  --color-success: #00d68f;
-  --color-danger: #ff4757;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
 
   /* Border */
-  --color-border: #1e1e2e;
+  --color-border: #1e1e24;
 }
 
 @layer base {
@@ -37,11 +40,19 @@
     background: var(--color-app-bg);
     color: var(--color-text-primary);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  /* Focus ring for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar { width: 5px; }

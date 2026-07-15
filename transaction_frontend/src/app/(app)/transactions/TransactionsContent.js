@@ -5,7 +5,6 @@ import Card from "@/components/ui/Card";
 import { useTransactions } from "@/hooks/useTransactions";
 
 // ─── Helpers ───────────────────────────────────────
-// ... keeping formatAmount, formatDate, formatTime unchanged ...
 function formatAmount(amount) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -44,9 +43,9 @@ function FilterTabs({ active, onChange }) {
         <button
           key={f.value}
           onClick={() => onChange(f.value)}
-          className={`px-3.5 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer border-none ${
+          className={`px-3.5 py-1.5 rounded-md text-xs font-medium transition-all duration-200 cursor-pointer border-none ${
             active === f.value
-              ? "bg-accent text-accent-text"
+              ? "bg-accent text-accent-text shadow-sm"
               : "bg-transparent text-text-secondary hover:text-text-primary"
           }`}
         >
@@ -63,10 +62,10 @@ function TransactionRow({ tx }) {
   const isDebit = tx.type === "DEBIT";
 
   return (
-    <div className="flex items-center justify-between py-3 border-b border-border last:border-b-0">
+    <div className="flex items-center justify-between py-3.5 border-b border-border last:border-b-0 group">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div
-          className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+          className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
             isDebit ? "bg-danger/10 text-danger" : "bg-success/10 text-success"
           }`}
         >
@@ -100,7 +99,7 @@ function TransactionRow({ tx }) {
       )}
 
       <span
-        className={`text-sm font-semibold whitespace-nowrap ml-3 ${
+        className={`text-sm font-semibold whitespace-nowrap ml-3 tabular-nums ${
           isDebit ? "text-danger" : "text-success"
         }`}
       >
@@ -116,7 +115,7 @@ function TransactionSkeleton() {
   return (
     <div className="animate-pulse">
       {[...Array(6)].map((_, i) => (
-        <div key={i} className="flex items-center gap-3 py-3 border-b border-border last:border-b-0">
+        <div key={i} className="flex items-center gap-3 py-3.5 border-b border-border last:border-b-0">
           <div className="w-8 h-8 rounded-lg bg-hover-bg shrink-0" />
           <div className="flex-1">
             <div className="w-28 h-3.5 bg-hover-bg rounded mb-1.5" />
@@ -157,11 +156,16 @@ export default function TransactionsContent() {
   if (isError && transactions.length === 0) {
     return (
       <Card>
-        <div className="flex flex-col items-center gap-3 py-8">
+        <div className="flex flex-col items-center gap-3 py-10">
+          <div className="w-10 h-10 bg-danger/10 rounded-full flex items-center justify-center text-danger">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
           <p className="text-danger text-sm">{error?.message || "Failed to load transactions"}</p>
           <button
             onClick={() => refetch()}
-            className="px-4 py-2 bg-accent text-accent-text rounded-md text-sm font-medium hover:bg-accent-hover transition-colors cursor-pointer border-none"
+            className="px-4 py-2 bg-accent text-accent-text rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors cursor-pointer border-none"
           >
             Retry
           </button>
@@ -180,16 +184,23 @@ export default function TransactionsContent() {
         {isLoading ? (
           <TransactionSkeleton />
         ) : filtered.length === 0 ? (
-          <p className="text-text-secondary text-sm text-center py-8">
-            {filter === "ALL" ? "No transactions yet." : `No ${filter === "DEBIT" ? "sent" : "received"} transactions.`}
-          </p>
+          <div className="flex flex-col items-center gap-2 py-12">
+            <div className="w-10 h-10 bg-hover-bg rounded-full flex items-center justify-center text-text-muted mb-1">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+              </svg>
+            </div>
+            <p className="text-text-secondary text-sm">
+              {filter === "ALL" ? "No transactions yet." : `No ${filter === "DEBIT" ? "sent" : "received"} transactions.`}
+            </p>
+          </div>
         ) : (
           <>
             {filtered.map((tx) => (
               <TransactionRow key={tx.id} tx={tx} />
             ))}
 
-            {/* Load More Button or Spinner */}
+            {/* Load More */}
             {filter === "ALL" && hasNextPage && (
               <button
                 onClick={() => fetchNextPage()}
@@ -199,12 +210,9 @@ export default function TransactionsContent() {
                 {isFetchingNextPage ? (
                   <div className="w-5 h-5 border-2 border-border border-t-accent rounded-full animate-spin" />
                 ) : (
-                  <div className="flex flex-col items-center gap-1 text-text-muted group-hover:text-text-primary transition-colors">
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Load More</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce-slow">
-                      <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
-                    </svg>
-                  </div>
+                  <span className="text-xs font-medium text-text-muted group-hover:text-text-primary transition-colors uppercase tracking-wider">
+                    Load More
+                  </span>
                 )}
               </button>
             )}

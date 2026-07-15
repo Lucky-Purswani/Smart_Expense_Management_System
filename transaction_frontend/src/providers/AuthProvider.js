@@ -61,6 +61,19 @@ export default function AuthProvider({ children }) {
     router.push("/login");
   }, [router]);
 
+  // Block all rendering while auth state is being determined
+  // This prevents the flash of authenticated content before redirect
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-app-bg z-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-[3px] border-border border-t-accent rounded-full animate-spin" />
+          <span className="text-xs text-text-muted font-medium tracking-wide">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
       {children}

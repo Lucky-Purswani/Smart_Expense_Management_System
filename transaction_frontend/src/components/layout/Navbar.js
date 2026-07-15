@@ -13,11 +13,16 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 bg-panel-bg/80 backdrop-blur-sm border-b border-border">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-40 bg-panel-bg/80 backdrop-blur-md border-b border-border">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/transfer" className="text-sm font-bold text-text-primary tracking-tight">
-          TransactPay
+        <Link href="/transfer" className="flex items-center gap-2 group">
+          <div className="w-7 h-7 bg-accent rounded-lg flex items-center justify-center shadow-sm shadow-accent/20 group-hover:shadow-accent/40 transition-shadow">
+            <span className="text-accent-text text-xs font-bold">T</span>
+          </div>
+          <span className="text-sm font-semibold text-text-primary tracking-tight">
+            TransactPay
+          </span>
         </Link>
 
         {/* Nav Links */}
@@ -28,10 +33,10 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   active
-                    ? "text-accent"
-                    : "text-text-secondary hover:text-text-primary"
+                    ? "bg-accent/10 text-accent"
+                    : "text-text-secondary hover:text-text-primary hover:bg-hover-bg"
                 }`}
               >
                 {link.label}

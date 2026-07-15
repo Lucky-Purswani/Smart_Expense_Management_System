@@ -9,7 +9,10 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-xl font-bold text-text-primary mb-1">
+          <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-accent/20">
+            <span className="text-accent-text text-base font-bold">T</span>
+          </div>
+          <h1 className="text-xl font-semibold text-text-primary mb-1">
             Create your account
           </h1>
           <p className="text-sm text-text-secondary">

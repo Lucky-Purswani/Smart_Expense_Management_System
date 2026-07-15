@@ -20,8 +20,8 @@ export default function TransferForm() {
   const transferMoney = useTransferMoney();
 
   const [form, setForm] = useState({
-    recipient: "", // for payment
-    accountNumber: "", // for transfer
+    recipient: "",
+    accountNumber: "",
     amount: "",
     note: "",
   });
@@ -64,7 +64,6 @@ export default function TransferForm() {
         setSuccess("Money transferred successfully");
       }
       
-      // Reset form on success
       setForm({
         recipient: "",
         accountNumber: "",
@@ -79,21 +78,21 @@ export default function TransferForm() {
   const isPending = createTransaction.isPending || transferMoney.isPending;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       {/* Mode Toggle */}
       <div className="flex p-1 bg-input-bg border border-border rounded-lg">
         <button
           onClick={() => { setMode(MODES.PAYMENT); setError(null); setSuccess(null); }}
-          className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors border-none cursor-pointer ${
-            mode === MODES.PAYMENT ? "bg-accent text-accent-text" : "bg-transparent text-text-secondary hover:text-text-primary"
+          className={`flex-1 py-2 text-xs font-medium rounded-md transition-all duration-200 border-none cursor-pointer ${
+            mode === MODES.PAYMENT ? "bg-accent text-accent-text shadow-sm" : "bg-transparent text-text-secondary hover:text-text-primary"
           }`}
         >
           Make a Payment
         </button>
         <button
           onClick={() => { setMode(MODES.TRANSFER); setError(null); setSuccess(null); }}
-          className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors border-none cursor-pointer ${
-            mode === MODES.TRANSFER ? "bg-accent text-accent-text" : "bg-transparent text-text-secondary hover:text-text-primary"
+          className={`flex-1 py-2 text-xs font-medium rounded-md transition-all duration-200 border-none cursor-pointer ${
+            mode === MODES.TRANSFER ? "bg-accent text-accent-text shadow-sm" : "bg-transparent text-text-secondary hover:text-text-primary"
           }`}
         >
           Transfer Money
@@ -102,12 +101,18 @@ export default function TransferForm() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
-          <div className="p-3 bg-danger/10 border border-danger/20 rounded-md text-danger text-xs">
+          <div className="flex items-center gap-2 p-3 bg-danger/10 border border-danger/20 rounded-lg text-danger text-xs">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
             {error}
           </div>
         )}
         {success && (
-          <div className="p-3 bg-success/10 border border-success/20 rounded-md text-success text-xs">
+          <div className="flex items-center gap-2 p-3 bg-success/10 border border-success/20 rounded-lg text-success text-xs">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
             {success}
           </div>
         )}
@@ -149,7 +154,7 @@ export default function TransferForm() {
           onChange={update("note")}
         />
 
-        <Button type="submit" fullWidth className="mt-2" loading={isPending}>
+        <Button type="submit" fullWidth className="mt-1" loading={isPending}>
           {mode === MODES.PAYMENT ? "Confirm Payment" : "Send Money"}
         </Button>
       </form>
