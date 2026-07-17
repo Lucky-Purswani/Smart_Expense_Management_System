@@ -37,7 +37,12 @@ const userService = {
       where: { id: userId },
       select: {
         accountNumber: true,
-        accountHolderName: true
+        accountHolderName: true,
+        wallet: {
+          select: {
+            balance: true
+          }
+        }
       }
     });
   
@@ -45,7 +50,11 @@ const userService = {
       throw new ApiError(404, "User not found");
     }
     
-    return user;
+    return {
+      accountNumber: user.accountNumber,
+      accountHolderName: user.accountHolderName,
+      balance: user.wallet?.balance || 0
+    };
   },
   
   
