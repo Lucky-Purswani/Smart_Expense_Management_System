@@ -1,5 +1,5 @@
 import express from "express";
-import expenseWindowController from "../controllers/expensewindow.controller.js";
+import expenseWindowController from "../controllers/expenseWindow.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
