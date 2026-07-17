@@ -23,7 +23,19 @@ const app = express();
 // ---------------- MIDDLEWARES ----------------
 // Security
 app.use(helmet());
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://transaction-simulation-mocha.vercel.app",
+  "https://smart-expense-management-system-six.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 // Body parser
 app.use(express.json());
